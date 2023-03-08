@@ -1,7 +1,8 @@
 import { Button, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react';
-import First from './src/screen/onboarding/onboarding';
 
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from './src/navigation/AppNavigator';
 
 const STYLES = ['default', 'dark-content', 'light-content'];
 const TRANSITIONS = ['fade', 'slide', 'none'];
@@ -10,9 +11,7 @@ const App = () => {
   const [hidden, setHidden] = useState(false);
   const [statusBarStyle, setStatusBarStyle] = useState(STYLES[0]);
   const [statusBarTransition, setStatusBarTransition] = useState(TRANSITIONS[0]);
-
   const changeStatusBarVisibility = () => setHidden(!hidden);
-
   const changeStatusBarStyle = () => {
     const styleId = STYLES.indexOf(statusBarStyle) + 1;
     if (styleId === STYLES.length) {
@@ -21,7 +20,6 @@ const App = () => {
       setStatusBarStyle(STYLES[styleId]);
     }
   };
-
   const changeStatusBarTransition = () => {
     const transition = TRANSITIONS.indexOf(statusBarTransition) + 1;
     if (transition === TRANSITIONS.length) {
@@ -32,7 +30,6 @@ const App = () => {
   };
 
   return (
-
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <StatusBar animated={true}
         backgroundColor={'transparent'}
@@ -40,7 +37,9 @@ const App = () => {
         showHideTransition={statusBarTransition}
         translucent={true}
         hidden={hidden} />
-      <First />
+      <NavigationContainer >
+        <AppNavigator />
+      </NavigationContainer>
     </View>
   )
 }

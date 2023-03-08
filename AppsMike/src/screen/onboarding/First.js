@@ -4,8 +4,16 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import Slider from './Sliders';
 import Logo from '../../assets/logo/logo.svg';
 import Popins from '../../assets/fonts/popins';
+import { useNavigation } from '@react-navigation/native';
 
 const First = () => {
+    const navigation = useNavigation();
+
+
+    const moveScreen = () => {
+        navigation.navigate('Login');
+    }
+
     return (
         <View style={[styles.container]} >
             <View style={{ width: '100%', height: '100%' }}>
@@ -33,13 +41,13 @@ const First = () => {
                             fontFamily: Popins[400]
                         }]}>Join Us</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.6} style={[styles.buttonBox]}>
-                        <Text style={[styles.textBox,
-                        {
+                    <TouchableOpacity onPress={moveScreen} activeOpacity={0.6} style={[styles.buttonBox]}>
+                        <Text style={[styles.textBox, {
                             color: '#FFFFFF',
                             fontSize: 16,
                             fontFamily: Popins[400]
-                        }]}>Sign In</Text>
+                        }]}>Sign In
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>

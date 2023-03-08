@@ -20,7 +20,7 @@ const Sliders = () => {
       loop
       entranceBearing={Bearing.Center}
       fadeAnimationDuration={1500}
-      autoPlay={{ enable: true, delay: 1500 }}>
+      autoPlay={{ enable: true, delay: 3500 }}>
       {listimages}
     </FadeCarousel>
   )
