@@ -1,0 +1,9 @@
+{
+	"style": {
+		"prefix": "sle",
+		"body": [
+		  "style={[styles.$1]} "
+		],
+		"description": "style"
+	  }
+}

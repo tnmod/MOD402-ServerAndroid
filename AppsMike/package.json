@@ -12,7 +12,12 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.6",
     "react": "18.1.0",
-    "react-native": "0.70.7"
+    "react-native": "0.70.7",
+    "react-native-fadecarousel": "^1.0.2",
+    "react-native-fading-slides": "^0.3.1",
+    "react-native-svg": "^13.8.0",
+    "react-native-svg-transformer": "^1.0.0",
+    "react-native-swiper-flatlist": "^3.0.18"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
