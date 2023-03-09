@@ -11,7 +11,7 @@ const First = () => {
 
 
     const moveScreen = () => {
-        navigation.navigate('Login');
+        navigation.navigate('LoginNavigator');
     }
 
     return (

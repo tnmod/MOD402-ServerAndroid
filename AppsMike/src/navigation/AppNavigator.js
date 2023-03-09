@@ -6,6 +6,7 @@ import Login from './../screen/login/Login';
 import First from '../screen/onboarding/First';
 import Popins from './../assets/fonts/popins';
 import { useNavigation } from '@react-navigation/native';
+import LoginNavigator from './../screen/login/LoginNavigator';
 
 const Stack = createStackNavigator();
 
@@ -20,12 +21,8 @@ const HomeScreen = () => {
 const LoginScreen = () => {
     return (
         <Stack.Navigator initialRouteName='First' screenOptions={{ headerShown: false }}>
-
-
             <Stack.Screen name='First' component={First} />
-
-
-            <Stack.Screen name='Login' component={Login} options={{
+            <Stack.Screen name='LoginNavigator' component={LoginNavigator} options={{
                 headerShown: true,
                 title: '',
                 cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
@@ -36,11 +33,10 @@ const LoginScreen = () => {
                     }
                     return (
                         <Pressable onPress={reScreen} style={{ height: '100%', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 14 }}>
-                            <Text style={{ fontFamily: Popins[600], paddingTop: 5, textAlignVertical: 'center' }}>Close</Text>
+                            <Text style={{ fontFamily: Popins[600], paddingTop: 5, textAlignVertical: 'center', color: 'grey' }}>Close</Text>
                         </Pressable>
                     )
                 }),
-
             }} />
         </Stack.Navigator>
     )
