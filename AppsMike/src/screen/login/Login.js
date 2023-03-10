@@ -22,10 +22,10 @@ const Login = (props) => {
       let text = email;
       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
       if (reg.test(text) === false) {
-        return setCheck(false);
+        setCheck(false);
       }
       else {
-        return setCheck(true);
+        setCheck(true);
       }
     };
     checkEmail();

@@ -4,6 +4,7 @@ import Logo from '../../assets/logo/logo-dark.svg';
 import Popins from './../../assets/fonts/popins';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import TextInputOutlined, { TextInputOutlinedKeyboard } from '../../custom/TextInputOutlined';
 
 const LoginPassword = ({ route }) => {
 
@@ -15,9 +16,18 @@ const LoginPassword = ({ route }) => {
     const [check, setCheck] = useState(false);
     const [checkClick, setCheckClick] = useState(false);
 
+
+    const [firstName, setFirstName] = useState('');
+    const [checkFirth, setCheckFirth] = useState(false);
+
+
+    const [lastName, setLastName] = useState('');
+    const [checkLast, setCheckLast] = useState(false);
+
+
     const [password, setPassword] = useState('');
     const [checkPass, setCheckPass] = useState(false);
-    const [textInput, setTextInput] = useState('');
+    const [checkPassLength, setCheckPassLength] = useState(false);
 
     const [showPass, setShowPass] = useState(false);
 
@@ -25,25 +35,66 @@ const LoginPassword = ({ route }) => {
 
     const navigator = useNavigation();
 
-
     useEffect(() => {
-        checkEmail = () => {
 
-        };
-        checkEmail();
-    }, [])
+        checkPassWord();
+
+    }, [password])
+
+    const checkPassWord = () => {
+        let text = password;
+        let reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        if (reg.test(text) === false) {
+            setCheck(false);
+            // console.log("false");
+        }
+        else {
+
+            setCheck(true);
+            // console.log("true");
+        }
+
+        if (text.length >= 8) {
+            setCheckPassLength(true);
+            //  console.log("8");
+        } else {
+            setCheckPassLength(false);
+
+        }
+        checkFirthName(false, "");
+    };
+
+    const checkFirthName = (click, text) => {
+        setCheckClick(click);
+        console.log(click);
+        setFirstName(text);
+    }
+    const checkLastName = (click, text) => {
+        setCheckClick(click);
+        console.log(click);
+        setFirstName(text);
+    }
 
 
     // date
     const [date, setDate] = useState(new Date(Date.now()));
+    const [checkDate, setCheckDate] = useState(false);
     const [show, setShow] = useState(false);
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(false);
+        setCheckDate(true);
         setDate(currentDate);
     };
-
+    const checkBirthDay = () => {
+        if (checkDate) {
+            return "Day " + date.getDate() + " month " + (date.getMonth() + 1) + ", " + date.getFullYear();
+        }
+        else {
+            return "Date of Birth";
+        }
+    }
 
 
     return (
@@ -62,20 +113,22 @@ const LoginPassword = ({ route }) => {
                     </TouchableOpacity>
                 </View>
 
-                {/* InputEmail */}
+                {/* InputName */}
                 <View style={[{ marginBottom: 34, flexDirection: 'row', justifyContent: 'space-between' }]} >
                     <View style={[styles.btnInput]}>
-                        <TextInput onChange={() => setCheckClick(true)} onChangeText={(Text) => setEmail(Text)} style={[styles.inputText]} placeholderTextColor={"grey"} placeholder='First Name' />
+                        <TextInputOutlined multiline={false} label={'Frist name'} onChangeText={(Text) => checkFirthName(true, Text)} style={[styles.inputText]} secureTextEntry={false} placeholderTextColor={"grey"} placeholder='' />
                         <Text style={[checkClick ? [check ? { display: 'none' } : { display: 'flex' }] : { display: 'none' }, { position: 'absolute', bottom: -16, left: 0, fontSize: 10, marginHorizontal: 10, color: 'red' }]}>Invalid email address</Text>
                     </View>
                     <View style={[styles.btnInput,]}>
-                        <TextInput onChange={() => setCheckClick(true)} onChangeText={(Text) => setEmail(Text)} style={[styles.inputText]} placeholderTextColor={"grey"} placeholder='Surname' />
+                        <TextInputOutlined multiline={false} label={'Last name'} onChangeText={(Text) => setCheckClick(false, Text)} style={[styles.inputText]} secureTextEntry={false} placeholderTextColor={"grey"} placeholder='' />
                         <Text style={[checkClick ? [check ? { display: 'none' } : { display: 'flex' }] : { display: 'none' }, { position: 'absolute', bottom: -16, left: 0, fontSize: 10, marginHorizontal: 10, color: 'red' }]}>Invalid email address</Text>
                     </View>
                 </View>
+
+                {/* InputPassword */}
                 <View style={{ marginBottom: 24, }}>
                     <View style={[styles.btnInput, { width: '100%', marginBottom: 8 }]}>
-                        <TextInput onChange={() => setCheckClick(true)} onChangeText={(Text) => setEmail(Text)} style={[styles.inputText]} placeholderTextColor={"grey"} placeholder='Password' />
+                        <TextInputOutlined multiline={false} label={'Password'} onChangeText={() => setCheckClick(true)} style={[styles.inputText]} secureTextEntry={false} placeholderTextColor={"grey"} placeholder='' />
                     </View>
                     <View style={{ paddingHorizontal: 10 }}>
                         <View style={[styles.checkContainer, { marginBottom: 4 }]}>
@@ -89,19 +142,22 @@ const LoginPassword = ({ route }) => {
                     </View>
                 </View>
 
-                <TouchableOpacity onPress={() => { show ? setShow(false) : setShow(true) }} style={[styles.btnInput, { width: '100%', marginBottom: 8 }]}>
-                    <TextInput selectTextOnFocus={false} editable={false} value={"Day " + date.getDate() + " month " + (date.getMonth() + 1) + ", " + date.getFullYear()} style={{ color: '#000' }} />
-                    {show && (
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            value={date}
-                            mode={'date'}
-                            is24Hour={true}
-                            onChange={onChange}
-                        />
-                    )}
-                </TouchableOpacity>
-
+                {/* Birthday */}
+                <View style={[{ height: 52, marginBottom: 8, alignItems: 'center', borderWidth: 1.1, borderColor: 'grey', borderRadius: 7, marginHorizontal: 4 }]}>
+                    <TouchableOpacity onPress={() => { show ? setShow(false) : setShow(true) }} style={{ paddingEnd: 10, flex: 1, flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }} >
+                        <TextInput value={checkBirthDay()} style={[styles.inputText, { flex: 1, textAlignVertical: 'center', justifyContent: 'center', alignItems: 'center', padding: 0 }, checkDate ? { color: '#000', textAlign: 'center' } : { color: 'grey', textAlign: 'left' }]} selectTextOnFocus={false} editable={false} />
+                        <Image style={{ width: 24, height: 23, resizeMode: 'stretch' }} source={require('../../assets/icon/calendar.png')} />
+                        {show && (
+                            <DateTimePicker
+                                testID="dateTimePicker"
+                                value={date}
+                                mode={'date'}
+                                is24Hour={true}
+                                onChange={onChange}
+                            />
+                        )}
+                    </TouchableOpacity>
+                </View>
 
 
 
@@ -136,23 +192,24 @@ const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     inputText: {
-        fontSize: 14,
+        fontSize: 16,
         letterSpacing: 0.2,
         width: '100%',
-        height: '100%',
-        color: 'black'
+        textAlignVertical: 'center',
+        color: 'black',
+        paddingBottom: 4,
+        backgroundColor: 'white',
+        borderColor: '#474E68',
+        outlineColor: '#474E68',
     },
     checkContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     btnInput: {
-        borderColor: '#000',
-        borderWidth: 1,
-        borderRadius: 7,
         paddingHorizontal: 4,
         flexDirection: 'row',
-        width: '48%'
+        width: '48%',
     },
     text: {
         fontSize: 12,
