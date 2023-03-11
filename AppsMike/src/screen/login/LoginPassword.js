@@ -2,7 +2,7 @@ import { Animated, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensio
 import React, { useEffect, useRef, useState } from 'react';
 import Logo from '../../assets/logo/logo-dark.svg';
 import Popins from './../../assets/fonts/popins';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import TextInputOutlined, { TextInputOutlinedKeyboard } from '../../custom/TextInputOutlined';
 
@@ -13,68 +13,52 @@ const LoginPassword = ({ route }) => {
     const naviation = useNavigation();
 
 
-    const [check, setCheck] = useState(false);
-    const [checkClick, setCheckClick] = useState(false);
 
 
     const [firstName, setFirstName] = useState('');
-    const [checkFirth, setCheckFirth] = useState(false);
-
+    const [checkClickFirstName, setCheckClickFirstName] = useState(false);
 
     const [lastName, setLastName] = useState('');
-    const [checkLast, setCheckLast] = useState(false);
-
+    const [checkClickLastName, setCheckClickLastName] = useState(false);
 
     const [password, setPassword] = useState('');
-    const [checkPass, setCheckPass] = useState(false);
+    const [passwordSuccess, setPasswordSuccess] = useState(false);
+    const [hidePassWord, setHidePassWord] = useState(true);
+    const [checkPassReg, setCheckPassReg] = useState(false);
     const [checkPassLength, setCheckPassLength] = useState(false);
 
-    const [showPass, setShowPass] = useState(false);
-
     const [continues, setContinues] = useState(false);
-
     const navigator = useNavigation();
 
     useEffect(() => {
 
         checkPassWord();
+        console.log(password);
 
-    }, [password])
+    }, [password, checkPassLength, checkPassReg])
 
     const checkPassWord = () => {
         let text = password;
-        let reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-        if (reg.test(text) === false) {
-            setCheck(false);
-            // console.log("false");
-        }
-        else {
-
-            setCheck(true);
-            // console.log("true");
-        }
-
-        if (text.length >= 8) {
+        let reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{1,}$/;
+        if (text.length > 7) {
             setCheckPassLength(true);
-            //  console.log("8");
         } else {
             setCheckPassLength(false);
 
         }
-        checkFirthName(false, "");
+        if (reg.test(text) === false) {
+            setCheckPassReg(false);
+        }
+        else {
+            setCheckPassReg(true);
+        }
+        if (checkPassLength && checkPassReg) {
+            setPasswordSuccess(true);
+        } else {
+            setPasswordSuccess(false);
+        }
+
     };
-
-    const checkFirthName = (click, text) => {
-        setCheckClick(click);
-        console.log(click);
-        setFirstName(text);
-    }
-    const checkLastName = (click, text) => {
-        setCheckClick(click);
-        console.log(click);
-        setFirstName(text);
-    }
-
 
     // date
     const [date, setDate] = useState(new Date(Date.now()));
@@ -97,6 +81,33 @@ const LoginPassword = ({ route }) => {
     }
 
 
+
+    useEffect(() => {
+        if (firstName.length > 0 && lastName.length > 0 && passwordSuccess && checkDate) {
+            setContinues(true);
+        } else {
+            setContinues(false);
+        }
+    }, [firstName, lastName, password, checkDate, passwordSuccess])
+
+    const StyleBorder = (choose) => {
+        switch (choose) {
+            case 'firstname':
+                return checkClickFirstName ? ((firstName.length == 0) ? "#ef233c" : "grey") : "grey";
+            case 'style firstname':
+                return checkClickFirstName ? ((firstName.length == 0) ? { display: 'flex' } : { display: 'none' }) : { display: 'none' };
+            case 'style lastname':
+                return checkClickLastName ? ((lastName.length == 0) ? { display: 'flex' } : { display: 'none' }) : { display: 'none' };
+            case 'lastname':
+                return checkClickLastName ? ((lastName.length == 0) ? "#ef233c" : "grey") : "grey";
+        }
+    }
+
+    // let borderLineFirstNames = checkClickFirstName ? ((firstName.length == 0) ? "#ef233c" : "grey") : "grey";
+    // let borderLineLastNames = checkClickLastName ? ((lastName.length == 0) ? "#ef233c" : "grey") : "grey";
+    // let themeFirsName = { colors: { text: 'white', primary: '#474E68', background: '#fff' } };
+    // let themeLastName  = { colors: { text: 'white', primary: '#474E68', background: '#fff' } };
+
     return (
         <View style={[styles.container]} >
             <View style={[styles.containerContent, { display: 'flex', }]}>
@@ -116,28 +127,46 @@ const LoginPassword = ({ route }) => {
                 {/* InputName */}
                 <View style={[{ marginBottom: 34, flexDirection: 'row', justifyContent: 'space-between' }]} >
                     <View style={[styles.btnInput]}>
-                        <TextInputOutlined multiline={false} label={'Frist name'} onChangeText={(Text) => checkFirthName(true, Text)} style={[styles.inputText]} secureTextEntry={false} placeholderTextColor={"grey"} placeholder='' />
-                        <Text style={[checkClick ? [check ? { display: 'none' } : { display: 'flex' }] : { display: 'none' }, { position: 'absolute', bottom: -16, left: 0, fontSize: 10, marginHorizontal: 10, color: 'red' }]}>Invalid email address</Text>
+                        <TextInputOutlined
+                            outlineColor={StyleBorder('firstname')}
+                            onBlur={() => setCheckClickFirstName(true)}
+                            multiline={false}
+                            label={'Frist name'}
+                            onChangeText={(Text) => setFirstName(Text)}
+                            style={[styles.inputText]}
+                            secureTextEntry={false}
+                            placeholderTextColor={"grey"}
+                            placeholder='' />
+                        <Text style={[StyleBorder('style firstname'), styles.inputName]}>Required</Text>
                     </View>
                     <View style={[styles.btnInput,]}>
-                        <TextInputOutlined multiline={false} label={'Last name'} onChangeText={(Text) => setCheckClick(false, Text)} style={[styles.inputText]} secureTextEntry={false} placeholderTextColor={"grey"} placeholder='' />
-                        <Text style={[checkClick ? [check ? { display: 'none' } : { display: 'flex' }] : { display: 'none' }, { position: 'absolute', bottom: -16, left: 0, fontSize: 10, marginHorizontal: 10, color: 'red' }]}>Invalid email address</Text>
+                        <TextInputOutlined
+                            outlineColor={StyleBorder('lastname')}
+                            onBlur={() => setCheckClickLastName(true)}
+                            multiline={false}
+                            label={'Last name'}
+                            onChangeText={(Text) => setLastName(Text)}
+                            style={[styles.inputText]}
+                            secureTextEntry={false}
+                            placeholderTextColor={"grey"}
+                            placeholder='' />
+                        <Text style={[StyleBorder('style lastname'), styles.inputName]}>Required</Text>
                     </View>
                 </View>
 
                 {/* InputPassword */}
                 <View style={{ marginBottom: 24, }}>
                     <View style={[styles.btnInput, { width: '100%', marginBottom: 8 }]}>
-                        <TextInputOutlined multiline={false} label={'Password'} onChangeText={() => setCheckClick(true)} style={[styles.inputText]} secureTextEntry={false} placeholderTextColor={"grey"} placeholder='' />
+                        <TextInputOutlined secureTextEntry={hidePassWord} onPress={() => setHidePassWord(!hidePassWord)} right={hidePassWord ? require('../../assets/icon/eye.png') : require('../../assets/icon/eye-close.png')} onBlur={() => console.log(password)} label={'Password'} onChangeText={(Text) => setPassword(Text)} style={[styles.inputText]} placeholderTextColor={"grey"} placeholder='' />
                     </View>
                     <View style={{ paddingHorizontal: 10 }}>
                         <View style={[styles.checkContainer, { marginBottom: 4 }]}>
-                            <Image style={{ width: 16, height: 16 }} source={require('../../assets/icon/close.png')} />
-                            <Text style={[{ color: '#616161', fontWeight: '400', fontSize: 12 }]}>Minimum of 8 characters</Text>
+                            <Image style={{ width: 12, height: 12, marginEnd: 4 }} source={checkPassLength ? require('../../assets/icon/success-password.png') : require('../../assets/icon/unsuccess-password.png')} />
+                            <Text style={[checkPassLength ? { color: '#52b788', fontWeight: '400', fontSize: 12 } : { color: '#616161', fontWeight: '400', fontSize: 12 }]}>Minimum of 8 characters</Text>
                         </View>
                         <View style={[styles.checkContainer]}>
-                            <Image style={{ width: 16, height: 16 }} source={require('../../assets/icon/close.png')} />
-                            <Text style={[{ color: '#616161', fontWeight: '400', fontSize: 12 }]}>Uppercase, lowercase letters and one number</Text>
+                            <Image style={{ width: 12, height: 12, marginEnd: 4 }} source={checkPassReg ? require('../../assets/icon/success-password.png') : require('../../assets/icon/unsuccess-password.png')} />
+                            <Text style={[checkPassReg ? { color: '#52b788', fontWeight: '400', fontSize: 12 } : { color: '#616161', fontWeight: '400', fontSize: 12 }]}>Uppercase, lowercase letters and one number</Text>
                         </View>
                     </View>
                 </View>
@@ -175,7 +204,7 @@ const LoginPassword = ({ route }) => {
 
                 {/* button */}
                 <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                    <TouchableOpacity onPress={() => { }} disabled={check} style={[check ? { backgroundColor: '#000' } : { backgroundColor: '#616161' }, { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 1000, marginVertical: 20 }]}>
+                    <TouchableOpacity disabled={!continues} onPress={() => { }} style={[continues ? { backgroundColor: '#000' } : { backgroundColor: '#616161' }, { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 1000, marginVertical: 20 }]}>
                         <Text style={{ color: '#fff', fontFamily: Popins[400], fontSize: 12 }}>Continue</Text>
                     </TouchableOpacity>
                 </View>
@@ -191,13 +220,21 @@ const { width, height } = Dimensions.get('window');
 
 
 const styles = StyleSheet.create({
+    inputName: {
+        position: 'absolute',
+        bottom: -16,
+        left: 0,
+        fontSize: 10,
+        marginHorizontal: 20,
+        color: '#ef233c'
+    },
     inputText: {
         fontSize: 16,
         letterSpacing: 0.2,
         width: '100%',
         textAlignVertical: 'center',
         color: 'black',
-        paddingBottom: 4,
+        paddingBottom: 2,
         backgroundColor: 'white',
         borderColor: '#474E68',
         outlineColor: '#474E68',
@@ -227,3 +264,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 26,
     }
 })
+

@@ -7,6 +7,7 @@ import First from '../screen/onboarding/First';
 import Popins from './../assets/fonts/popins';
 import { useNavigation } from '@react-navigation/native';
 import LoginNavigator from './../screen/login/LoginNavigator';
+import GetStarted from './../screen/getstarted/GetStarted';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +21,7 @@ const HomeScreen = () => {
 
 const LoginScreen = () => {
     return (
-        <Stack.Navigator initialRouteName='First' screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='GetStarted' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='First' component={First} />
             <Stack.Screen name='LoginNavigator' component={LoginNavigator} options={{
                 headerShown: true,
@@ -38,6 +39,7 @@ const LoginScreen = () => {
                     )
                 }),
             }} />
+            <Stack.Screen name='GetStarted' component={GetStarted} />
         </Stack.Navigator>
     )
 };

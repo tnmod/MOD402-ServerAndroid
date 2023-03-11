@@ -48,7 +48,7 @@ const Login = (props) => {
 
         {/* InputEmail */}
         <View style={[{ marginBottom: 34, borderColor: '#000', borderWidth: 1, borderRadius: 7, paddingHorizontal: 4 }]} >
-          <TextInput value={email} onChange={() => setCheckClick(true)} onChangeText={(Text) => setEmail(Text)} style={{ fontSize: 14, letterSpacing: 0.2, color: 'black' }} placeholder='Email' placeholderTextColor={"grey"} />
+          <TextInput onChange={() => setCheckClick(true)} onChangeText={(Text) => setEmail(Text)} style={{ fontSize: 14, letterSpacing: 0.2, color: 'black' }} placeholder='Email' placeholderTextColor={"grey"} />
           <Text style={[checkClick ? [check ? { display: 'none' } : { display: 'flex' }] : { display: 'none' }, { position: 'absolute', bottom: -16, left: 0, fontSize: 10, marginHorizontal: 10, color: 'red' }]}>Invalid email address</Text>
         </View>
 
@@ -67,7 +67,7 @@ const Login = (props) => {
 
         {/* button */}
         <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <TouchableOpacity disabled={false} onPress={() => { navigator.navigate('LoginPassword', { getEmail: email }) }} style={[check ? { backgroundColor: '#000' } : { backgroundColor: '#616161' }, { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 1000, marginVertical: 20 }]}>
+          <TouchableOpacity disabled={!check} onPress={() => { navigator.navigate('LoginPassword', { getEmail: email }) }} style={[check ? { backgroundColor: '#000' } : { backgroundColor: '#616161' }, { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 1000, marginVertical: 20 }]}>
             <Text style={{ color: '#fff', fontFamily: Popins[400], fontSize: 12 }}>Continue</Text>
           </TouchableOpacity>
         </View>
